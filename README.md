@@ -1,0 +1,2 @@
+# SharedKernel
+OpenHRCore's SharedKernel
