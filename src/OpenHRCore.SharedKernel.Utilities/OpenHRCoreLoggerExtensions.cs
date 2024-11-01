@@ -8,9 +8,6 @@ namespace OpenHRCore.SharedKernel.Utilities
     /// </summary>
     public static class OpenHRCoreLoggerExtensions
     {
-        // Prefix based on the executing assembly's name to distinguish log messages by layer.
-        private static readonly string LayerPrefix = Assembly.GetExecutingAssembly().GetName().Name ?? string.Empty;
-
         /// <summary>
         /// Logs an informational message with the layer-specific prefix.
         /// </summary>
@@ -19,7 +16,9 @@ namespace OpenHRCore.SharedKernel.Utilities
         /// <param name="args">Optional arguments for formatting the message.</param>
         public static void LogLayerInfo(this ILogger logger, string message, params object?[] args)
         {
-            logger.LogInformation($"[{LayerPrefix}] {message}", args);
+            string layerName = Assembly.GetCallingAssembly()?.GetName().Name ?? string.Empty;
+
+            logger.LogInformation($"[{layerName}] {message}", args);
         }
 
         /// <summary>
@@ -30,7 +29,9 @@ namespace OpenHRCore.SharedKernel.Utilities
         /// <param name="args">Optional arguments for formatting the message.</param>
         public static void LogLayerWarning(this ILogger logger, string message, params object?[] args)
         {
-            logger.LogWarning($"[{LayerPrefix}] {message}", args);
+            string layerName = Assembly.GetCallingAssembly()?.GetName().Name ?? string.Empty;
+
+            logger.LogWarning($"[{layerName}] {message}", args);
         }
 
         /// <summary>
@@ -42,7 +43,9 @@ namespace OpenHRCore.SharedKernel.Utilities
         /// <param name="args">Optional arguments for formatting the message.</param>
         public static void LogLayerError(this ILogger logger, Exception? exception, string message, params object?[] args)
         {
-            logger.LogError(exception, $"[{LayerPrefix}] {message}", args);
+            string layerName = Assembly.GetCallingAssembly()?.GetName().Name ?? string.Empty;
+
+            logger.LogError(exception, $"[{layerName}] {message}", args);
         }
     }
 }
