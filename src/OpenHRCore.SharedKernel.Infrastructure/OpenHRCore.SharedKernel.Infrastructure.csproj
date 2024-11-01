@@ -1,18 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\OpenHRCore.SharedKernel.Application\OpenHRCore.SharedKernel.Application.csproj" />
-    <ProjectReference Include="..\OpenHRCore.SharedKernel.Domain\OpenHRCore.SharedKernel.Domain.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Version>1.0.1-beta</Version>
+		<OutputPath>../Packages</OutputPath>
+		<PackageIcon>Logo.png</PackageIcon>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\Assets\Logo.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\OpenHRCore.SharedKernel.Application\OpenHRCore.SharedKernel.Application.csproj" />
+		<ProjectReference Include="..\OpenHRCore.SharedKernel.Domain\OpenHRCore.SharedKernel.Domain.csproj" />
+	</ItemGroup>
 
 </Project>
