@@ -84,6 +84,15 @@ namespace OpenHRCore.SharedKernel.Domain
         /// <returns>A task that represents the asynchronous operation. The task result contains the first entity that matches the condition, including specified related entities, or null if not found.</returns>
         Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, string includeProperties);
 
+
+        /// <summary>
+        /// Asynchronously retrieves the first entity that matches the specified predicate and includes related entities.
+        /// </summary>
+        /// <param name="predicate">The condition to filter entities.</param>
+        /// <param name="includeProperties">An array of expressions specifying the related entities to include.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the first entity that matches the condition, including specified related entities, or null if not found.</returns>
+        Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties);
+
         #endregion
 
         #region Update Operations

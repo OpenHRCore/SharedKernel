@@ -104,6 +104,21 @@ namespace OpenHRCore.SharedKernel.Infrastructure
                 ?? throw new InvalidOperationException("Entity not found.");
         }
 
+        /// <inheritdoc />
+        public async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            ValidatePredicate(predicate);
+
+            IQueryable<TEntity> query = _dbContext.Set<TEntity>();
+
+            foreach (var includeProperty in includeProperties)
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return await query.FirstOrDefaultAsync(predicate)
+                ?? throw new InvalidOperationException("Entity not found.");
+        }
         #endregion
 
         #region Update Operations
