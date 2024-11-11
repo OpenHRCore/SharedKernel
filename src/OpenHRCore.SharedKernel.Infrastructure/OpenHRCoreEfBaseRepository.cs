@@ -7,7 +7,6 @@ namespace OpenHRCore.SharedKernel.Infrastructure
     /// <summary>
     /// Generic repository implementation for handling CRUD operations using Entity Framework Core.
     /// </summary>
-    /// <typeparam name="TDbContext">The type of the DbContext.</typeparam>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     public class OpenHRCoreEfBaseRepository<TEntity> : IOpenHRCoreBaseRepository<TEntity>
         where TEntity : OpenHRCoreBaseEntity
@@ -15,7 +14,7 @@ namespace OpenHRCore.SharedKernel.Infrastructure
         protected DbContext _dbContext;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OpenHRCoreEfBaseRepository{TDbContext, TEntity}"/> class.
+        /// Initializes a new instance of the <see cref="OpenHRCoreEfBaseRepository{TEntity}"/> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
         /// <exception cref="ArgumentNullException">Thrown when dbContext is null.</exception>
@@ -65,6 +64,19 @@ namespace OpenHRCore.SharedKernel.Infrastructure
         }
 
         /// <inheritdoc />
+        public async Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            IQueryable<TEntity> query = _dbContext.Set<TEntity>();
+
+            foreach (var includeProperty in includeProperties)
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return await query.ToListAsync();
+        }
+
+        /// <inheritdoc />
         public async Task<IEnumerable<TEntity>> GetWhereAsync(Expression<Func<TEntity, bool>> predicate)
         {
             ValidatePredicate(predicate);
@@ -76,6 +88,20 @@ namespace OpenHRCore.SharedKernel.Infrastructure
         {
             ValidatePredicate(predicate);
             var query = BuildQueryWithIncludes(includeProperties);
+            return await query.Where(predicate).ToListAsync();
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<TEntity>> GetWhereAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            ValidatePredicate(predicate);
+            IQueryable<TEntity> query = _dbContext.Set<TEntity>();
+
+            foreach (var includeProperty in includeProperties)
+            {
+                query = query.Include(includeProperty);
+            }
+
             return await query.Where(predicate).ToListAsync();
         }
 
@@ -202,7 +228,6 @@ namespace OpenHRCore.SharedKernel.Infrastructure
             }
 
             return maxValue!;
-
         }
 
         #endregion
