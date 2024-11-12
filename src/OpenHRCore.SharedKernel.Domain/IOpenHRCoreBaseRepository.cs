@@ -1,4 +1,7 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace OpenHRCore.SharedKernel.Domain
 {
@@ -57,6 +60,24 @@ namespace OpenHRCore.SharedKernel.Domain
         /// <param name="includeProperties">Expressions specifying the related entities to include.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a collection of all entities with included properties.</returns>
         Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includeProperties);
+
+        /// <summary>
+        /// Asynchronously retrieves a page of entities from the repository with sorting, filtering and searching capabilities.
+        /// </summary>
+        /// <param name="pageNumber">The page number to retrieve (1-based).</param>
+        /// <param name="pageSize">The number of items per page.</param>
+        /// <param name="orderBy">A function to order the entities.</param>
+        /// <param name="ascending">True to sort in ascending order, false for descending order.</param>
+        /// <param name="searchCriteria">Dictionary containing property names and search values for filtering.</param>
+        /// <param name="includeProperties">Expressions specifying the related entities to include.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a tuple with total count and filtered/sorted collection.</returns>
+        Task<(int TotalCount, IEnumerable<TEntity> Items)> GetPagedAsync<TKey>(
+            int pageNumber,
+            int pageSize,
+            Expression<Func<TEntity, TKey>>? orderBy = null,
+            bool ascending = true,
+            Dictionary<string, string>? searchCriteria = null,
+            params Expression<Func<TEntity, object>>[] includeProperties);
 
         /// <summary>
         /// Asynchronously retrieves entities that match the specified predicate.
